@@ -1,0 +1,82 @@
+[
+    {
+        "model": "inmobiliaria.property",
+        "pk": 1,
+        "fields": {
+            "name": "Casa en la playa",
+            "description": "Hermosa casa frente al mar con acceso directo a la playa.",
+            "total_area": 200,
+            "built_area": 150,
+            "parking": 2,
+            "rooms": 4,
+            "bathrooms": 2,
+            "address": "Playa Bonita 456",
+            "region": 5,
+            "commune": 30,
+            "prop_type": "casa",
+            "price": 1000000,
+            "owner": 1,
+            "renter": null
+        }
+    },
+    {
+        "model": "inmobiliaria.property",
+        "pk": 2,
+        "fields": {
+            "name": "Departamento céntrico",
+            "description": "Departamento moderno en el centro de la ciudad, cercano a todo.",
+            "total_area": 90,
+            "built_area": 85,
+            "parking": 1,
+            "rooms": 3,
+            "bathrooms": 1,
+            "address": "Calle Principal 123",
+            "region": 2,
+            "commune": 5,
+            "prop_type": "departamento",
+            "price": 800000,
+            "owner": 1,
+            "renter": 2
+        }
+    },
+    {
+        "model": "inmobiliaria.property",
+        "pk": 3,
+        "fields": {
+            "name": "Casa en el campo",
+            "description": "Amplia parcela con casa construida",
+            "total_area": 2500,
+            "built_area": 180,
+            "parking": 6,
+            "rooms": 5,
+            "bathrooms": 3,
+            "address": "Camino El Uyuy 456",
+            "region": 6,
+            "commune": 81,
+            "prop_type": "parcela",
+            "price": 1500000,
+            "owner": 1,
+            "renter": null
+        }
+    },
+    {
+        "model": "inmobiliaria.property",
+        "pk": 4,
+        "fields": {
+            "name": "Deptartamento en la playa",
+            "description": "Departamento en Viña, cerca de las Salinas",
+            "total_area": 80,
+            "built_area": 80,
+            "parking": 1,
+            "rooms": 2,
+            "bathrooms": 2,
+            "address": "Playa Mas Bonita 789",
+            "region": 6,
+            "commune": 51,
+            "prop_type": "departamento",
+            "price": 600000,
+            "owner": 1,
+            "renter": null
+        }
+    }
+]

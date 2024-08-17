@@ -1,0 +1,32 @@
+[
+    {
+        "model": "inmobiliaria.user",
+        "pk": 1,
+        "fields": {
+            "username": "arrendador1",
+            "password": "12345",
+            "email": "ferfer@mail.com",
+            "rut": "12345678K",
+            "address": "Calle Falsa 123",
+            "phone": "+56986432211",
+            "user_type": 1,
+            "first_name": "Fernanda",
+            "last_name": "Fernández"
+        }
+    },
+    {
+        "model": "inmobiliaria.user",
+        "pk": 2,
+        "fields": {
+            "username": "arrendatario1",
+            "password": "544321",
+            "email": "este@mail.com",
+            "rut": "17654321K",
+            "address": "Avenida Siempreviva 742",
+            "phone": "+56984112789",
+            "user_type": 2,
+            "first_name": "Esteban",
+            "last_name": "Estévez"
+        }
+    }
+]

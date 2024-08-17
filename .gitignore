@@ -114,4 +114,5 @@ __pypackages__
 # Pyre type checker
 .pyre
 
-./comunas-regiones.json
+comunas-regiones.json
+reformat.py

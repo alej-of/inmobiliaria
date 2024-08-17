@@ -51,7 +51,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'Proyecto.urls'
-AUTH_USER_MODEL = 'inmobiliaria.BaseUser'
+AUTH_USER_MODEL = 'inmobiliaria.User'
 
 TEMPLATES = [
     {
