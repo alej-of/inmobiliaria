@@ -1,0 +1,56 @@
+<div class="offcanvas offcanvas-end text-white bg-dark" tabindex="-1" id="editAccountOffcanvas"
+    aria-labelledby="editAccountOffcanvasLabel">
+    <div class="offcanvas-header">
+        <h5 id="editAccountOffcanvasLabel">Editar Datos de la Cuenta</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <form method="post" action="{% url 'update_account' %}">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="username" class="form-label">Nombre de Usuario</label>
+                <input type="text" class="form-control" id="username" name="username" value="{{ user.username }}">
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Correo Electrónico</label>
+                <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}">
+            </div>
+            <div class="mb-3">
+                <label for="first_name" class="form-label">Nombre</label>
+                <input type="text" class="form-control" id="first_name" name="first_name" value="{{ user.first_name }}">
+            </div>
+            <div class="mb-3">
+                <label for="last_name" class="form-label">Apellido</label>
+                <input type="text" class="form-control" id="last_name" name="last_name" value="{{ user.last_name }}">
+            </div>
+            <div class="mb-3">
+                <label for="rut" class="form-label">RUT</label>
+                <input type="text" class="form-control" id="rut" name="rut" value="{{ user.rut }}">
+            </div>
+            <div class="mb-3">
+                <label for="address" class="form-label">Dirección</label>
+                <input type="text" class="form-control" id="address" name="address" value="{{ user.address }}">
+            </div>
+            <div class="mb-3">
+                <label for="phone" class="form-label">Teléfono</label>
+                <input type="text" class="form-control" id="phone" name="phone" value="{{ user.phone }}">
+            </div>
+            <div class="mb-3">
+                <p class="text-center my-4">Para cambiar tu contraseña, debes ingresar la contraseña actual.</p>
+            </div>
+            <div class="mb-3">
+                <label for="current_password" class="form-label">Contraseña Actual (opcional)</label>
+                <input type="password" class="form-control" id="current_password" name="current_password">
+            </div>
+            <div class="mb-3">
+                <label for="new_password" class="form-label">Nueva Contraseña (opcional)</label>
+                <input type="password" class="form-control" id="new_password" name="new_password">
+            </div>
+            <div class="mb-3">
+                <label for="confirm_password" class="form-label">Confirmar Nueva Contraseña</label>
+                <input type="password" class="form-control" id="confirm_password" name="confirm_password">
+            </div>
+            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+        </form>
+    </div>
+</div>
