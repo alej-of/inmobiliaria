@@ -40,14 +40,16 @@ def index(request):
 @login_required
 def profile(request):
     user = request.user
+    prop = Property.objects.none()
     if user.is_landlord:
-        prop = Property.objects.filter(owner=user.id)
-    elif user.is_tenant:
-        prop = Property.objects.filter(renter=user.id)
+        prop = prop | Property.objects.filter(owner=user.id)
+    if user.is_tenant:
+        prop = prop | Property.objects.filter(renter=user.id)
+
     context = {
-        'properties':prop
+        'properties': prop.distinct()
     }
-    return render(request,'profile.html',context)
+    return render(request, 'profile.html', context)
 
 def add_property(request):
     regions = Region.objects.all()
