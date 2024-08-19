@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
-{% block title %}Inmobiliaria - Registro{% endblock %}
+{% block title %}Inmobiliaria - Agregar Propiedad{% endblock %}
 {% block content %}
 <div class="container my-5">
     <div class="row justify-content-center">
         <div class="col-md-8 col-lg-6">
             <div class="card shadow-sm">
                 <div class="card-body">
-                    <h2 class="text-center mt-2 mb-5">Registrar nuevo usuario</h2>
+                    <h2 class="text-center mt-2 mb-5">Agregar Nueva Propiedad</h2>
                     <form method="post" class="mx-auto" style="max-width: 400px;">
                         {% csrf_token %}
                         {% if form.errors %}
@@ -25,7 +25,23 @@
                         <div class="mb-3 row">
                             <label for="{{ field.id_for_label }}" class="col-sm-5 col-form-label">{{ field.label }}</label>
                             <div class="col-sm-7">
-                                {{ field }}
+                                {% if field.name == "region" %}
+                                    <select id="region" name="region" class="form-control">
+                                        <option value="">Seleccione una región</option>
+                                        {% for region in regions %}
+                                        <option value="{{ region.id }}">{{ region.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                {% elif field.name == "comuna" %}
+                                    <option value="">Seleccione una comuna</option>
+                                    <select id="comuna" name="comuna" class="form-control">
+                                        {% for comuna in comunas %}
+                                        <option value="{{ comuna.id }}" {% if selected_commune == comuna.id %}selected{% endif %}>{{ comuna.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                {% else %}
+                                    {{ field }}
+                                {% endif %}
                                 {% if field.errors %}
                                 <div class="text-danger">
                                     {{ field.errors }}
@@ -34,8 +50,9 @@
                             </div>
                         </div>
                         {% endfor %}
-                        <button type="submit" class="btn btn-success w-100 my-5">Registrar</button>
+                        <button type="submit" class="btn btn-success w-100 my-5">Agregar Propiedad</button>
                     </form>
+                    
                 </div>
             </div>
         </div>

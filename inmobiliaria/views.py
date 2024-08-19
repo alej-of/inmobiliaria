@@ -1,22 +1,90 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login,authenticate,logout, update_session_auth_hash
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .models import User, Property
-from .forms import SignUpForm
+from django.http import JsonResponse
+from .models import User, Property, Comuna, Region
+from .forms import SignUpForm, PropertyForm
+import inmobiliaria.services as s
 
 # Create your views here.
+
 def index(request):
+    properties = Property.objects.filter(renter__isnull=True)
+    prop_type = request.GET.get('prop_type')
+    region_id = request.GET.get('region')
+    commune_id = request.GET.get('commune')
+
+    if prop_type:
+        properties = properties.filter(prop_type=prop_type)
+    if region_id:
+        properties = properties.filter(region_id=region_id)
+    if commune_id:
+        properties = properties.filter(commune_id=commune_id)
+
+    regions = Region.objects.all()
+    comunas = Comuna.objects.filter(region_id=region_id) if region_id else Comuna.objects.none()
+
     context = {
+        'properties': properties,
+        'regions': regions,
+        'comunas': comunas,
+        'selected_type': prop_type,
+        'selected_region': region_id,
+        'selected_commune': commune_id,
     }
-    return render(request,'index.html',context)
+
+    return render(request, 'index.html', context)
 
 @login_required
 def profile(request):
+    user = request.user
+    if user.is_landlord:
+        prop = Property.objects.filter(owner=user.id)
+    elif user.is_tenant:
+        prop = Property.objects.filter(renter=user.id)
     context = {
+        'properties':prop
     }
     return render(request,'profile.html',context)
+
+def add_property(request):
+    regions = Region.objects.all()
+    region_id = request.GET.get('region')
+    comunas = Comuna.objects.filter(region_id=region_id) if region_id else Comuna.objects.none()
+    if request.method == 'POST':
+        form = PropertyForm(request.POST, request.FILES)
+        if form.is_valid():
+            name = form.cleaned_data.get('name')
+            description = form.cleaned_data.get('description')
+            total_area = form.cleaned_data.get('total_area')
+            built_area = form.cleaned_data.get('built_area')
+            parking = form.cleaned_data.get('parking')
+            rooms = form.cleaned_data.get('rooms')
+            bathrooms = form.cleaned_data.get('bathrooms')
+            address = form.cleaned_data.get('address')
+            region = form.cleaned_data.get('region')
+            commune = form.cleaned_data.get('commune')
+            prop_type = form.cleaned_data.get('prop_type')
+            price = form.cleaned_data.get('price')
+            image = form.cleaned_data.get('image')
+
+            property = s.create_property(name, description, total_area, built_area, parking, rooms, bathrooms, address, region, commune, prop_type, price, image, request.user)
+            if property:
+                messages.success(request, 'Propiedad creada con éxito.')
+                return redirect('perfil')
+            else:
+                messages.error(request, 'Hubo un error al crear la propiedad.')
+    else:
+        form = PropertyForm()
+    context = {
+        'form': form,
+        'regions': regions,
+        'comunas' : comunas,
+    }
+
+    return render(request, 'add_property.html', context)
 
 def login_view(request):
     if request.method == 'POST':
@@ -113,3 +181,29 @@ def signup_view(request):
     }
 
     return render(request, 'signup.html', context)
+
+def get_comunas(request, region_id):
+    comunas = Comuna.objects.filter(region_id=region_id).values('id', 'name')
+    return JsonResponse(list(comunas), safe=False)
+
+def edit_property(request, property_id):
+    property = get_object_or_404(Property, id=property_id, owner=request.user)
+    if request.method == 'POST':
+        form = PropertyForm(request.POST, instance=property)
+        if form.is_valid():
+            form.save()
+            return redirect('perfil')
+    else:
+        form = PropertyForm(instance=property)
+    return render(request, 'edit_property.html', {'form': form})
+
+
+def delete_property(request, property_id):
+    property = get_object_or_404(Property, id=property_id, owner=request.user)
+    if request.method == 'POST':
+        deleted = s.delete_property(property_id)
+        if deleted:
+            messages.success(request, f'Propiedad "{property.name}" eliminada correctamente.')
+        return JsonResponse({'success': True})
+    messages.error(request, 'Error al eliminar propiedad')
+    return JsonResponse({'success': False, 'error': 'Invalid request method'})

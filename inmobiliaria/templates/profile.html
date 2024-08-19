@@ -7,6 +7,21 @@
             aria-controls="editAccountOffcanvas">
             Editar Cuenta
         </button>
+        {% if user.is_landlord %}
+        <a href="/add_property">
+            <button class="btn btn-success">
+                Añadir Propiedad
+            </button>
+        </a> 
+        {% endif %}
     </div>
     {% include './updateacc.html' %}
+    {% if user.is_landlord %}
+        <h3 class="container text-center my-3">Tus propiedades</h3>
+        {% include "./album.html" %}
+    {% endif %}
+    {% if user.is_tenant %}
+        <h3 class="container text-center my-3">Tus arriendos</h3>
+        {% include "./album.html" %}
+    {% endif %}
 {% endblock %}

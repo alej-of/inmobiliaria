@@ -1,6 +1,6 @@
 from .models import Property
 
-def create_property(name, description, total_area, built_area, parking, rooms, bathrooms, address, commune, prop_type, price):
+def create_property(name, description, total_area, built_area, parking, rooms, bathrooms, address, region, commune, prop_type, price, image, owner):
     try:
         property = Property.objects.create(
             name=name,
@@ -11,9 +11,12 @@ def create_property(name, description, total_area, built_area, parking, rooms, b
             rooms=rooms,
             bathrooms=bathrooms,
             address=address,
+            region = region,
             commune=commune,
             prop_type=prop_type,
-            price=price
+            price=price,
+            image=image,
+            owner=owner
         )
         return property
     except Exception as e:

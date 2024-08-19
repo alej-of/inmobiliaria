@@ -47,10 +47,7 @@ class Comuna(models.Model):
     region = models.ForeignKey(Region, related_name='comunas', on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'{self.name}, {self.region.name}'
-
-class Tipoinmueble(models.Model):
-    tipo_inmueble = models.CharField(max_length=20)
+        return f'{self.name}'
 
 class Property(models.Model):
     PROPERTY_TYPE_CHOICES = [
@@ -73,6 +70,6 @@ class Property(models.Model):
     price = models.PositiveIntegerField(blank=False)
     owner = models.ForeignKey(User, related_name='owned_properties', on_delete=models.SET_NULL, blank=True, null=True)
     renter = models.ForeignKey(User, related_name='rented_properties', on_delete=models.SET_NULL, blank=True, null=True)
-
+    image = models.URLField(max_length=100,blank=True)
     def __str__(self):
-        return f'{self.name} ({self.prop_type}) - Owner: {self.owner.username if self.owner else "None"}'
+        return f'{self.name} ({self.prop_type}) - Dueño: {self.owner.username if self.owner else "None"}'

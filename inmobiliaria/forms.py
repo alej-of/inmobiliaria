@@ -1,6 +1,37 @@
 from django import forms
-from .models import User, UserType
+from .models import User, UserType, Property, Comuna
 from django.contrib.auth.forms import UserCreationForm
+
+class PropertyForm(forms.ModelForm):
+    class Meta:
+        model = Property
+        fields = ['image','name', 'description', 'price', 'prop_type', 'rooms', 'bathrooms', 'parking', 'address','region', 'commune', 'built_area', 'total_area']
+        labels = {
+            'image': 'Imagen',
+            'name': 'Nombre',
+            'description': 'Descripción',
+            'prop_type': 'Tipo de Propiedad',
+            'price': 'Precio',
+            'rooms': 'Habitaciones',
+            'bathrooms': 'Baños',
+            'parking': 'Estacionamiento',
+            'address': 'Dirección',
+            'region': 'Región',
+            'commune': 'Comuna',
+            'built_area': 'Superficie construida (m²)',
+            'total_area': 'Superficie total (m²)',
+            
+            
+        }
+        widgets = {
+            'description': forms.Textarea(attrs={'rows': 4}),
+        }
+    
+    def __init__(self, *args, **kwargs):
+        super(PropertyForm, self).__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            field.widget.attrs.update({'class': 'form-control'})
+
 
 class SignUpForm(UserCreationForm):
     email = forms.EmailField(

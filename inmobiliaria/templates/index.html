@@ -1,5 +1,39 @@
 {% extends "./base.html" %}
 {% block title %}Inmobiliaria{% endblock %}
 {% block content %}
-    <h1 class="container-fluid text-center m-5">INICIO</h1>
+    <div class="container my-5">
+        <form method="get" class="row g-3 mb-5">
+            <div class="col-md-4">
+                <label for="prop_type" class="form-label">Tipo de Propiedad</label>
+                <select id="prop_type" name="prop_type" class="form-select">
+                    <option value="">Todos</option>
+                    <option value="casa" {% if selected_type == "casa" %}selected{% endif %}>Casa</option>
+                    <option value="departamento" {% if selected_type == "departamento" %}selected{% endif %}>Departamento</option>
+                    <option value="parcela" {% if selected_type == "parcela" %}selected{% endif %}>Parcela</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label for="region" class="form-label">Región</label>
+                <select id="region" name="region" class="form-select">
+                    <option value="">Todas</option>
+                    {% for region in regions %}
+                    <option value="{{ region.id }}" {% if selected_region == region.id %}selected{% endif %}>{{ region.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label for="commune" class="form-label">Comuna</label>
+                <select id="commune" name="commune" class="form-select">
+                    <option value="">Todas</option>
+                    {% for comuna in comunas %}
+                    <option value="{{ comuna.id }}" {% if selected_commune == comuna.id %}selected{% endif %}>{{ comuna.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-12 text-center">
+                <button type="submit" class="btn btn-success">Filtrar</button>
+            </div>
+        </form>
+        {% include "./album.html" %}
+    </div>
 {% endblock %}

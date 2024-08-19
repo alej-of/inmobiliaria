@@ -1,0 +1,40 @@
+<div class="album py-5">
+    <div class="container">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+            {% for prop in properties %}
+            <div class="col">
+                <div class="card shadow-sm h-100">
+                    <img src="{{ prop.image }}" class="card-img-top" alt="{{ prop.name }}">
+                    <div class="card-body">
+                        <h5 class="card-title fs-4">{{ prop.name }}</h5>
+                        <p class="card-text text-muted">{{ prop.description }}</p>
+                        <ul class="list-group list-group-flush">
+                          <li class="list-group-item"><i class="fa-solid fa-bed"></i> {{ prop.rooms }} habitaciones</li>
+                          <li class="list-group-item"><i class="fa-solid fa-toilet"></i> {{ prop.bathrooms }} baños</li>
+                          <li class="list-group-item"><i class="fa-solid fa-car-side"></i> {{ prop.parking }} estacionamientos</li>
+                          <li class="list-group-item"><i class="fa-solid fa-map-location-dot"></i> {{ prop.address }}</li>
+                          <li class="list-group-item"><i class="fa-solid fa-location-dot"></i> {{ prop.commune }}, Región de {{ prop.region }}</li>
+                          <li class="list-group-item"><i class="fa-solid fa-ruler-combined"></i> {{ prop.built_area }} m² construidos</li>
+                          <li class="list-group-item"><i class="fa-solid fa-expand-arrows-alt"></i> {{ prop.total_area }} m² totales</li>
+                        </ul>
+                        <div class="d-flex justify-content-between align-items-center mt-3">
+                            {% if prop.owner == user %}
+                            <div class="btn-group">
+                                <a href="{% url 'edit_property' prop.id %}" class="btn btn-sm btn-outline-secondary">Editar</a>
+                                <button type="button" class="btn btn-sm btn-outline-secondary" onclick="confirmDelete({{ prop.id }})">Eliminar</button>
+                            </div>
+                            {% elif user.is_tenant and prop.renter == None %}
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-sm btn-outline-secondary">Ofertar</button>
+                            </div>
+                            {% endif %}
+                            <small class="text-body-secondary">${{ prop.price }}</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+  </div>
+  

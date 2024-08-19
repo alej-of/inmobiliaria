@@ -1,0 +1,22 @@
+body {
+    background-color: ivory !important;
+}
+
+.card-img-top {
+    width: 200px;
+    height: 250px;
+    object-fit: cover;
+}
+
+.card {
+    height: 100%;
+}
+
+.card-body {
+    display: flex;
+    flex-direction: column;
+}
+
+.card-body .card-text {
+    flex-grow: 1;
+}
