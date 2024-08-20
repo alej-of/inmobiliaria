@@ -4,6 +4,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import JsonResponse
+from datetime import date
 from .models import User, Property, Comuna, Region
 from .forms import SignUpForm, PropertyForm
 import inmobiliaria.services as s
@@ -209,3 +210,33 @@ def delete_property(request, property_id):
         return JsonResponse({'success': True})
     messages.error(request, 'Error al eliminar propiedad')
     return JsonResponse({'success': False, 'error': 'Invalid request method'})
+
+def start_lease(request, property_id):
+    property = get_object_or_404(Property, id=property_id)
+
+    if request.user.is_authenticated and request.user.is_tenant:
+        if property.renter is None:
+            property.renter = request.user
+            property.lease_start_date = date.today()
+            property.save()
+            messages.success(request, f'Has arrendado la propiedad "{property.name}".')
+        else:
+            messages.error(request, f'La propiedad "{property.name}" no está disponible.')
+    else:
+        messages.error(request, f'No tienes autorización para rentar la propiedad "{property.name}".')
+
+    return redirect('perfil')
+
+def end_lease(request, property_id):
+    property = get_object_or_404(Property, id=property_id)
+
+    if request.user.is_authenticated:
+        if property.renter == request.user or property.owner==request.user:
+            property.renter = None
+            property.lease_end_date = date.today()
+            property.save()
+            messages.success(request, f'Finalizaste el arriendo de la propiedad "{property.name}"')
+        else:
+            messages.error(request, 'No tienes autorización para finalizar el arriendo de esta propiedad.')
+
+    return redirect('perfil')

@@ -32,13 +32,13 @@
                                         <option value="{{ region.id }}">{{ region.name }}</option>
                                         {% endfor %}
                                     </select>
-                                {% elif field.name == "comuna" %}
-                                    <option value="">Seleccione una comuna</option>
-                                    <select id="comuna" name="comuna" class="form-control">
+                                {% elif field.name == "commune" %}
+                                    <select id="commune" name="commune" class="form-control">
+                                        <option value="">Seleccione una comuna</option>
                                         {% for comuna in comunas %}
                                         <option value="{{ comuna.id }}" {% if selected_commune == comuna.id %}selected{% endif %}>{{ comuna.name }}</option>
                                         {% endfor %}
-                                    </select>
+                                    </select>       
                                 {% else %}
                                     {{ field }}
                                 {% endif %}

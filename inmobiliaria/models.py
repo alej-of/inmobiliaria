@@ -71,5 +71,7 @@ class Property(models.Model):
     owner = models.ForeignKey(User, related_name='owned_properties', on_delete=models.SET_NULL, blank=True, null=True)
     renter = models.ForeignKey(User, related_name='rented_properties', on_delete=models.SET_NULL, blank=True, null=True)
     image = models.URLField(max_length=100,blank=True)
+    lease_start_date = models.DateField(null=True, blank=True)
+    lease_end_date = models.DateField(null=True, blank=True)
     def __str__(self):
         return f'{self.name} ({self.prop_type}) - Dueño: {self.owner.username if self.owner else "None"}'
