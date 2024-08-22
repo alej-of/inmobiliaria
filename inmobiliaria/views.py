@@ -1,12 +1,12 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login,authenticate,logout, update_session_auth_hash
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import JsonResponse
 from datetime import date
 from .models import User, Property, Comuna, Region
-from .forms import SignUpForm, PropertyForm
+from .forms import SignUpForm, PropertyForm, UserChangeForm
 import inmobiliaria.services as s
 
 # Create your views here.
@@ -125,43 +125,47 @@ def logout_view(request):
 
 @login_required
 def update_account(request):
+    user = request.user
     if request.method == 'POST':
-        user = request.user
-        new_username = request.POST.get('username')
-        new_email = request.POST.get('email')
-        new_first_name = request.POST.get('first_name')
-        new_last_name = request.POST.get('last_name')
-        if new_username:
-            user.username = new_username
-        if new_email:
-            user.email = new_email
-        if new_first_name:
-            user.first_name = new_first_name
-        if new_last_name:
-            user.last_name = new_last_name
-        current_password = request.POST.get('current_password')
-        new_password = request.POST.get('new_password')
-        confirm_password = request.POST.get('confirm_password')
-        if new_password:
-            if current_password:
-                if user.check_password(current_password):
-                    if new_password == confirm_password:
-                        user.set_password(new_password)
-                        user.save()
-                        update_session_auth_hash(request, user)
-                        messages.success(request, 'Tus datos han sido actualizados y la contraseña cambiada correctamente.')
-                    else:
-                        messages.error(request, 'Las nuevas contraseñas no coinciden.')
-                else:
-                    messages.error(request, 'La contraseña actual es incorrecta.')
+        user_form = UserChangeForm(request.POST, instance=user)
+        password_form = PasswordChangeForm(user, request.POST)
+
+        if user_form.is_valid() and password_form.is_valid():
+            user_form.save()
+
+            if request.POST.get('new_password1'):
+                password_form.save()
+                update_session_auth_hash(request, user)
+                messages.success(request, 'Tus datos han sido actualizados y la contraseña cambiada correctamente.')
             else:
-                messages.error(request, 'Debes proporcionar tu contraseña actual para cambiar la contraseña nueva.')
+                messages.success(request, 'Tus datos han sido actualizados correctamente.')
 
-        user.save()
-        messages.success(request, 'Tus datos han sido actualizados correctamente.')
-        return redirect('index')
+            return redirect('perfil')
 
-    return render(request, 'index.html')
+
+        else:
+            user_form_errors = "".join([f"<li>{field.label}: {error}</li>" for field in user_form for error in field.errors])
+            password_form_errors = "".join([f"<li>{field.label}: {error}</li>" for field in password_form for error in field.errors])
+            error_message = "<p>Por favor, corrige los errores en el formulario:</p><ul>"
+            if user_form_errors:
+                error_message += user_form_errors
+            if password_form_errors:
+                error_message += password_form_errors
+            error_message += "</ul>"
+
+            messages.error(request, error_message)
+
+    else:
+        user_form = UserChangeForm(instance=user)
+        password_form = PasswordChangeForm(user)
+
+    context = {
+        'user_form': user_form,
+        'password_form': password_form
+    }
+
+    return render(request, 'profile.html', context)
+
 
 def signup_view(request):
     if request.method == 'POST':

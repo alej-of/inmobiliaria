@@ -1,6 +1,11 @@
 from django import forms
 from .models import User, UserType, Property, Comuna
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+
+class UserChangeForm(UserChangeForm):
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'first_name', 'last_name', 'rut', 'address', 'phone']
 
 class PropertyForm(forms.ModelForm):
     class Meta:

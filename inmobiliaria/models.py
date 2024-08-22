@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser, Group, Permission
+from django.contrib.auth.models import AbstractUser
 from django.core.validators import RegexValidator
 
 class UserType(models.Model):
@@ -23,18 +23,6 @@ class User(AbstractUser):
     class Meta:
         verbose_name = 'User'
         verbose_name_plural = 'Users'
-
-    groups = models.ManyToManyField(
-        Group,
-        related_name='%(app_label)s_%(class)s_related',
-        blank=True,
-    )
-    user_permissions = models.ManyToManyField(
-        Permission,
-        related_name='%(app_label)s_%(class)s_related',
-        blank=True,
-    )
-
 
 class Region(models.Model):
     name = models.CharField(max_length=100)

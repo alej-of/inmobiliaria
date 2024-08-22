@@ -20,11 +20,11 @@
         {% for message in messages %}
             {% if message.tags == 'error' %}
                 <div class="alert alert-danger" role="alert" id="auto-hide-message">
-                    {{ message }}
+                    {{ message|safe }}
                 </div>
             {% else %}
                 <div class="alert alert-success" role="alert" id="auto-hide-message">
-                    {{ message }}
+                    {{ message|safe }}
                 </div>
             {% endif %}
         {% endfor %}
